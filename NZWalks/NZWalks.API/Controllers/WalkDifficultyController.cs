@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NZWalks.API.Models.Domain;
@@ -21,6 +22,7 @@ namespace NZWalks.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "reader")]
         public async Task<IActionResult> GetAll()
         {
             var walkDifficulties = await  _walkDifficultyRepository.GetAllAsync();
@@ -33,6 +35,7 @@ namespace NZWalks.API.Controllers
         [HttpGet]
         [Route("{Id:guid}")]
         [ActionName("GetDifById")]
+        [Authorize(Roles = "reader")]
         public async Task<IActionResult> GetDifById(Guid Id)
         { 
             var walkDifficulty = await _walkDifficultyRepository.GetAsync(Id);
@@ -48,14 +51,15 @@ namespace NZWalks.API.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "writer")]
         public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] UpdateWalkDifficultyDto updateWalkDifficultyDto)
         {
             // Check request
 
-            if ( !ValidateUpdateWalkDifficulty(updateWalkDifficultyDto))
-            {
-                return BadRequest(ModelState);
-            }
+            //if ( !ValidateUpdateWalkDifficulty(updateWalkDifficultyDto))
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
             // Convert DTO to domain model, we are mapping source(updateRegionDto) on destination(our domain model) Region. 
 
@@ -80,13 +84,14 @@ namespace NZWalks.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "writer")]
         public async Task<IActionResult> AddRegionAsync(AddWalkDifficultyDto addWalkDifficultyDto)
         {
             // Request check
-            if (!ValidateAddWalkDifficulty(addWalkDifficultyDto))
-            {
-                return BadRequest(ModelState);
-            }
+            //if (!ValidateAddWalkDifficulty(addWalkDifficultyDto))
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
             // Request to Domain model
 
@@ -105,6 +110,7 @@ namespace NZWalks.API.Controllers
 
         [HttpDelete]
         [Route("{Id:guid}")]
+        [Authorize(Roles = "writer")]
         public async Task<IActionResult> DeleteById(Guid Id)
         { 
             var deleteWalkDif = await _walkDifficultyRepository.DeleteAsync(Id);

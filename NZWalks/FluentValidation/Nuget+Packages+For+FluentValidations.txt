@@ -1,0 +1,3 @@
+FluentValidation
+FluentValidation.AspNetCore
+FluentValidation.DependencyInjectionExtensions
